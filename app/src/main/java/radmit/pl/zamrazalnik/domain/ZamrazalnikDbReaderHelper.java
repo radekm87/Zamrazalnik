@@ -1,5 +1,6 @@
 package radmit.pl.zamrazalnik.domain;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +34,17 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
             res.moveToNext();
         }
         return array_list;
+    }
+
+    public boolean insertProduct (String productName, Integer quantity)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ZamrazalnikReader.FeedEntry.COLUMN_NAME_PRODUCT, productName);
+        contentValues.put(ZamrazalnikReader.FeedEntry.COLUMN_NAME_QUANTITY, quantity);
+
+        db.insert(ZamrazalnikReader.FeedEntry.TABLE_NAME, null, contentValues);
+        return true;
     }
 
     public void onCreate(SQLiteDatabase db) {

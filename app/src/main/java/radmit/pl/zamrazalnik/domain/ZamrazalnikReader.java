@@ -16,7 +16,7 @@ public final class ZamrazalnikReader {
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry._ID + " INTEGER PRIMARY KEY," +
-                    FeedEntry.COLUMN_NAME_PRODUCT + INTEGER_TYPE + COMMA_SEP +
+                    FeedEntry.COLUMN_NAME_PRODUCT + TEXT_TYPE + COMMA_SEP +
                     FeedEntry.COLUMN_NAME_QUANTITY + INTEGER_TYPE + " )";
 
     public static final String SQL_DELETE_ENTRIES =
@@ -28,7 +28,7 @@ public final class ZamrazalnikReader {
     static class FeedEntry implements BaseColumns {
         public static final String TABLE_NAME = "ZAPASY_LODOWKA";
 
-        public static final String COLUMN_NAME_PRODUCT = "PRODUKT_ID";
+        public static final String COLUMN_NAME_PRODUCT = "PRODUKT_NAME";
         public static final String COLUMN_NAME_QUANTITY = "ILOSC";
     }
 }
