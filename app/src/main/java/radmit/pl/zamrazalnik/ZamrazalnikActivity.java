@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -75,6 +76,8 @@ public class ZamrazalnikActivity extends AppCompatActivity {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null && scanResult.getContents() != null) {
             String re = scanResult.getContents();
+
+            Toast.makeText(getApplicationContext(), "OK -: " + re, Toast.LENGTH_SHORT).show();
         }
         // else continue with any other code you need in the method
 

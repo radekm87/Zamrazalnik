@@ -116,16 +116,27 @@ public class AddProductToFridgeActivity extends Activity {
                 Document document = new Document();
 
                 try {
-                    String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/zamrazalnik";
+//                    String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/zamrazalnik";
 
-                    File dir = new File(path);
-                    if(!dir.exists())
-                        dir.mkdirs();
+
+
+                    File path2 = Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DOWNLOADS);
+//                    File file = new File(path, "DemoPicture.jpg");
+
+
+
+//                    File dir = new File(path);
+//                    if(!dir.exists())
+//                        dir.mkdirs();
 
 //                    Log.d("PDFCreator", "PDF Path: " + path);
 
 
-                    File file = new File(dir, "sample.pdf");
+//                    File file = new File(dir, "sample.pdf");
+                    File file = new File(path2, "sample.pdf");
+//                    file.createNewFile();
+
                     PdfWriter.getInstance(document, new FileOutputStream(file));
 
                     document.open();
@@ -134,7 +145,7 @@ public class AddProductToFridgeActivity extends Activity {
                     BitmapDrawable bitDw = ((BitmapDrawable) d);
                     Bitmap bmp = bitDw.getBitmap();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     Image image = Image.getInstance(stream.toByteArray());
                     document.add(image);
 
@@ -142,23 +153,21 @@ public class AddProductToFridgeActivity extends Activity {
                     document.add(p);
 
                     BackgroundMail.newBuilder(getApplicationContext())
-                            .withUsername("spam@morawskim.pl")
-                            .withPassword("morawski89")
+                            .withUsername("magdalena.chmurzynska@gmail.com")
+                            .withPassword("Onomato peja")
                             .withMailto("radekm87@gmail.com")
                             .withSubject("Test subject")
                             .withBody("this is the body")
                             .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
                                 @Override
                                 public void onSuccess() {
-                                    int x = 0;
-                                    x = 1;
+                                    Toast.makeText(getApplicationContext(), "OK SEND MAIL: ", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .withOnFailCallback(new BackgroundMail.OnFailCallback() {
                                 @Override
                                 public void onFail() {
-                                    int x = 0;
-                                    x = 1;
+                                    Toast.makeText(getApplicationContext(), "FAILED SEND MAIL: ", Toast.LENGTH_SHORT).show();
                                 }
                             }).withAttachments(file.getAbsolutePath())
                             .send();
@@ -171,10 +180,13 @@ public class AddProductToFridgeActivity extends Activity {
 //                    startActivity(intent);
                 }
                 catch(DocumentException de) {
+                    Toast.makeText(getApplicationContext(), "Exception: " + de.getMessage(), Toast.LENGTH_SHORT).show();
                     de.printStackTrace();
                 } catch (MalformedURLException e) {
+                    Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "Exception: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 } finally {
                     document.close();
