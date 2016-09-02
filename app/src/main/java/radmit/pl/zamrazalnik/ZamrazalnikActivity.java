@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 import radmit.pl.zamrazalnik.activity.AddProductToFridgeActivity;
+import radmit.pl.zamrazalnik.activity.DisplayAllProductsActivity;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
 
 public class ZamrazalnikActivity extends AppCompatActivity {
@@ -70,6 +73,37 @@ public class ZamrazalnikActivity extends AppCompatActivity {
                 IntentIntegrator.initiateScan(ZamrazalnikActivity.this);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        super.onOptionsItemSelected(item);
+
+        switch(item.getItemId())
+        {
+            case R.id.item1:
+                Bundle dataBundle = new Bundle();
+                dataBundle.putInt("id", 0);
+
+//                Intent intent = new Intent(getApplicationContext(),DisplayContact.class);
+//                intent.putExtras(dataBundle);
+//
+//                startActivity(intent);
+                return true;
+            case R.id.item2:
+                Intent intent = new Intent(getApplicationContext(), DisplayAllProductsActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {

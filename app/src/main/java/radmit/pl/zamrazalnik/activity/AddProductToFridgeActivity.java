@@ -6,24 +6,20 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.print.PrintAttributes;
-import android.print.pdf.PrintedPdfDocument;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -36,9 +32,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import radmit.pl.zamrazalnik.R;
+import radmit.pl.zamrazalnik.SpinnerSelectItem;
 import radmit.pl.zamrazalnik.ZamrazalnikActivity;
+import radmit.pl.zamrazalnik.domain.bo.Produkt;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
 
 /**
@@ -46,19 +46,27 @@ import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
  */
 public class AddProductToFridgeActivity extends Activity {
 
-    TextView name;
+//    TextView name;
     TextView quantity;
+    Spinner productSelect;
     ZamrazalnikDbReaderHelper dbHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product);
+        setContentView(R.layout.activity_put_product_to_fridge);
         dbHelper = new ZamrazalnikDbReaderHelper(this);
 
-        name = (TextView) findViewById(R.id.editText);
+//        productSelect = (Spinner) findViewById(R.id.spinnerProduct);
         quantity = (TextView) findViewById(R.id.editText2);
+
+        // Gets all users but replace with whatever list of users you want.
+        List<SpinnerSelectItem> productsList = prepareProductSelectItemList();
+
+        ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, productsList);
+        Spinner productSelect = (Spinner) findViewById(R.id.spinnerProduct);
+        productSelect.setAdapter(userAdapter);
 
         Button btnReturn = (Button)findViewById(R.id.buttonReturn);
         btnReturn.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +83,21 @@ public class AddProductToFridgeActivity extends Activity {
         });
     }
 
+    private List<SpinnerSelectItem> prepareProductSelectItemList() {
+        ArrayList<Produkt> allProducts = dbHelper.getAllProducts();
+        ArrayList<SpinnerSelectItem> selectItems = new ArrayList<>();
+        for (Produkt prod : allProducts) {
+            SpinnerSelectItem si = new SpinnerSelectItem(prod.getId(),prod.getProductName());
+            selectItems.add(si);
+        }
+
+        return selectItems;
+    }
+
     private void saveRecordToDatabaseAndGenerateQrCode() {
-        if(dbHelper.insertProduct(name.getText().toString(), Integer.valueOf(quantity.getText().toString()))){
+        SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
+
+        if(dbHelper.insertProduct(selectProduct.getId(), Integer.valueOf(quantity.getText().toString()))){
             Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -86,7 +107,7 @@ public class AddProductToFridgeActivity extends Activity {
         final ImageView imgView = (ImageView) findViewById(R.id.imgQrCode);
         QRCodeWriter writer = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = writer.encode("produkt=" + name.getText().toString() + ";ilosc=" + quantity.getText().toString() + ";", BarcodeFormat.QR_CODE, 150, 150);
+            BitMatrix bitMatrix = writer.encode("produkt=" + selectProduct.getValue() + ";ilosc=" + quantity.getText().toString() + ";", BarcodeFormat.QR_CODE, 150, 150);
 //            BitMatrix bitMatrix = writer.encode("produkt=" + ";ilosc=" + ";", BarcodeFormat.QR_CODE, 150, 150);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
