@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public class ZapasyLodowka {
     public static final String TABLE = "ZAPASY_LODOWKA";
 
-    public static final String COLUMN_ID = "PRODUKT_ID";
+    public static final String COLUMN_ID = "ID";
     public static final String COLUMN_PRODUCT_ID = "PRODUKT_ID";
     public static final String COLUMN_QUANTITY = "ILOSC";
 
@@ -32,7 +32,7 @@ public class ZapasyLodowka {
         this.productDbVo = productDbVo;
         this.quantity = quantity;
     }
-    ZapasyLodowka(Long id, Integer quantity, Produkt productDbVo) {
+    public ZapasyLodowka(Long id, Integer quantity, Produkt productDbVo) {
         this.id = id;
         this.quantity = quantity;
         this.productDbVo = productDbVo;

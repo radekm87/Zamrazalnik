@@ -65,7 +65,7 @@ public class AddProductToFridgeActivity extends Activity {
         List<SpinnerSelectItem> productsList = prepareProductSelectItemList();
 
         ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, productsList);
-        Spinner productSelect = (Spinner) findViewById(R.id.spinnerProduct);
+        productSelect = (Spinner) findViewById(R.id.spinnerProduct);
         productSelect.setAdapter(userAdapter);
 
         Button btnReturn = (Button)findViewById(R.id.buttonReturn);
@@ -95,9 +95,9 @@ public class AddProductToFridgeActivity extends Activity {
     }
 
     private void saveRecordToDatabaseAndGenerateQrCode() {
-        SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
+        final SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
 
-        if(dbHelper.insertProduct(selectProduct.getId(), Integer.valueOf(quantity.getText().toString()))){
+        if(dbHelper.insertProductToFridge(selectProduct.getId(), Integer.valueOf(quantity.getText().toString()))){
             Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -170,7 +170,7 @@ public class AddProductToFridgeActivity extends Activity {
                     Image image = Image.getInstance(stream.toByteArray());
                     document.add(image);
 
-                    Paragraph p = new Paragraph("Produkt name");
+                    Paragraph p = new Paragraph(selectProduct.getValue());
                     document.add(p);
 
                     BackgroundMail.newBuilder(getApplicationContext())

@@ -23,8 +23,8 @@
         </activity>
 
         <activity android:name=".activity.AddProductToFridgeActivity"/>
-
-
+        <activity android:name=".activity.DisplayAllProductsActivity"/>
+        <activity android:name=".activity.AddProductToDatabaseActivity"/>
 
     </application>
 

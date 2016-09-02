@@ -1,6 +1,7 @@
 package radmit.pl.zamrazalnik.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +31,8 @@ public class AddProductToDatabaseActivity extends Activity {
         bSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dbHelper.insertNewProduct(new Produkt(nameProd.getText().toString()));
-                finish();
+                Intent intent = new Intent(getApplicationContext(), DisplayAllProductsActivity.class);
+                startActivity(intent);
             }
         });
     }

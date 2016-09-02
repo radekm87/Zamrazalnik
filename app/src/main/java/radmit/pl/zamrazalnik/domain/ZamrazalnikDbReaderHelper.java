@@ -16,7 +16,7 @@ import radmit.pl.zamrazalnik.domain.bo.ZapasyLodowka;
  */
 public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Zamrazalnik.db";
 
     public ZamrazalnikDbReaderHelper(Context context) {
@@ -29,7 +29,7 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + ZapasyLodowka.TABLE + " inner join " + Produkt.TABLE + " on PRODUKT_ID = ID", null );
+        Cursor res =  db.rawQuery( "select * from " + ZapasyLodowka.TABLE + " zl inner join " + Produkt.TABLE + " p on zl.PRODUKT_ID = p.ID", null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
@@ -66,7 +66,7 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + ZapasyLodowka.TABLE, null );
+        Cursor res =  db.rawQuery( "select * from " + Produkt.TABLE, null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
@@ -81,14 +81,42 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public boolean insertProduct (Long productId, Integer quantity)
+    private ZapasyLodowka getRecordZapasyLodowkaByProductId(Long productId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + ZapasyLodowka.TABLE + " where " + ZapasyLodowka.COLUMN_PRODUCT_ID + "="+productId+"", null );
+        res.moveToFirst();
+
+        if (res.getCount() == 0 || res.isNull(res.getColumnIndex(ZapasyLodowka.COLUMN_QUANTITY))) {
+            return null;
+        } else {
+            Produkt produkt = new Produkt(res.getLong(res.getColumnIndex(ZapasyLodowka.COLUMN_PRODUCT_ID)), null);
+            ZapasyLodowka zl = new ZapasyLodowka(
+                    res.getLong(res.getColumnIndex(ZapasyLodowka.COLUMN_ID)),
+                    res.getInt(res.getColumnIndex(ZapasyLodowka.COLUMN_QUANTITY)),
+                    produkt
+                    );
+            return zl;
+        }
+    }
+
+    public boolean insertProductToFridge(Long productId, Integer quantity)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ZapasyLodowka.COLUMN_PRODUCT_ID, productId);
-        contentValues.put(ZapasyLodowka.COLUMN_QUANTITY, quantity);
+        ZapasyLodowka zapasLodowka = getRecordZapasyLodowkaByProductId(productId);
 
-        db.insert(ZapasyLodowka.TABLE, null, contentValues);
+        if (zapasLodowka == null) {
+            // insert:
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ZapasyLodowka.COLUMN_PRODUCT_ID, productId);
+            contentValues.put(ZapasyLodowka.COLUMN_QUANTITY, quantity);
+            db.insert(ZapasyLodowka.TABLE, null, contentValues);
+        } else {
+            // modify
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ZapasyLodowka.COLUMN_QUANTITY, quantity + zapasLodowka.getQuantity());
+            db.update(ZapasyLodowka.TABLE, contentValues, "id = ? ", new String[] { Long.toString(zapasLodowka.getId()) } );
+        }
+
         return true;
     }
 

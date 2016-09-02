@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import radmit.pl.zamrazalnik.R;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
+import radmit.pl.zamrazalnik.domain.bo.Produkt;
 
 /**
  * Created by rmorawski on 02.09.16.
@@ -27,10 +28,13 @@ public class DisplayAllProductsActivity  extends Activity {
         setContentView(R.layout.activity_display_products);
         dbHelper = new ZamrazalnikDbReaderHelper(this);
 
-        ArrayList array_list = dbHelper.getAllProducts();
+        ArrayList<String> array_list = new ArrayList<>();
+        for (Produkt prod : dbHelper.getAllProducts()) {
+            array_list.add(prod.getProductName());
+        }
 
         ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
-        ListView obj = (ListView)findViewById(R.id.listView);
+        ListView obj = (ListView)findViewById(R.id.listViewProducts);
         obj.setAdapter(arrayAdapter);
 
         Button bAdd = (Button)findViewById(R.id.btnAddNewOnlyProduct);
