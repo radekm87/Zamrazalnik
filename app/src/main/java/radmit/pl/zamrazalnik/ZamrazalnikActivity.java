@@ -111,7 +111,18 @@ public class ZamrazalnikActivity extends AppCompatActivity {
         if (scanResult != null && scanResult.getContents() != null) {
             String re = scanResult.getContents();
 
-            Toast.makeText(getApplicationContext(), "OK -: " + re, Toast.LENGTH_SHORT).show();
+            String[] split = re.split(";");
+            if (split.length != 2) {
+                // error
+            }
+
+            if (dbHelper.takeProductFromFridge(split[0].replace("produkt=",""), split[1].replace("ilosc=",""))) {
+                Toast.makeText(getApplicationContext(), "OK -: " + re, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "ERROR usuwania!!! " + re, Toast.LENGTH_SHORT).show();
+
+            }
+
         }
         // else continue with any other code you need in the method
 

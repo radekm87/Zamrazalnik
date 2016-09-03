@@ -107,8 +107,7 @@ public class AddProductToFridgeActivity extends Activity {
         final ImageView imgView = (ImageView) findViewById(R.id.imgQrCode);
         QRCodeWriter writer = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = writer.encode("produkt=" + selectProduct.getValue() + ";ilosc=" + quantity.getText().toString() + ";", BarcodeFormat.QR_CODE, 150, 150);
-//            BitMatrix bitMatrix = writer.encode("produkt=" + ";ilosc=" + ";", BarcodeFormat.QR_CODE, 150, 150);
+            BitMatrix bitMatrix = writer.encode("produkt=" + selectProduct.getId() + ";ilosc=" + quantity.getText().toString() + ";", BarcodeFormat.QR_CODE, 150, 150);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

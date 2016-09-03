@@ -130,6 +130,22 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean takeProductFromFridge(String productId, String quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ZapasyLodowka zapasLodowka = getRecordZapasyLodowkaByProductId(Long.valueOf(productId));
+
+        if (zapasLodowka.getQuantity() > 1) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ZapasyLodowka.COLUMN_QUANTITY, zapasLodowka.getQuantity() - Integer.valueOf(quantity));
+            db.update(ZapasyLodowka.TABLE, contentValues, "id = ? ", new String[] { Long.toString(zapasLodowka.getId()) } );
+        } else {
+            // delete
+            db.delete(ZapasyLodowka.TABLE, "id = ? ", new String[] { Long.toString(zapasLodowka.getId()) });
+        }
+
+        return true;
+    }
+
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ZapasyLodowka.SQL_CREATE_ENTRIES);
         db.execSQL(Produkt.SQL_CREATE_ENTRIES);

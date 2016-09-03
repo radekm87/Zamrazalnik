@@ -38,11 +38,18 @@ public class DisplayAllProductsActivity  extends Activity {
         obj.setAdapter(arrayAdapter);
 
         Button bAdd = (Button)findViewById(R.id.btnAddNewOnlyProduct);
+        Button bCancel = (Button)findViewById(R.id.btnCancel);
 
         bAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddProductToDatabaseActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        bCancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
             }
         });
     }
