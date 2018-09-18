@@ -112,11 +112,11 @@ public class ZamrazalnikActivity extends AppCompatActivity {
             String re = scanResult.getContents();
 
             String[] split = re.split(";");
-            if (split.length != 2) {
+            if (split.length != 3) {
                 // error
             }
 
-            if (dbHelper.takeProductFromFridge(split[0].replace("produkt=",""), split[1].replace("ilosc=",""))) {
+            if (dbHelper.takeProductFromFridge(split[0].replace("produkt=",""), split[1].replace("ilosc=",""), split[2].replace("miejsce=",""))) {
                 Toast.makeText(getApplicationContext(), "OK -: " + re, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getApplicationContext(), "ERROR usuwania!!! " + re, Toast.LENGTH_SHORT).show();

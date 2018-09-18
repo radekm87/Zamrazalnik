@@ -38,6 +38,7 @@ import java.util.List;
 import radmit.pl.zamrazalnik.R;
 import radmit.pl.zamrazalnik.SpinnerSelectItem;
 import radmit.pl.zamrazalnik.ZamrazalnikActivity;
+import radmit.pl.zamrazalnik.domain.bo.Miejsce;
 import radmit.pl.zamrazalnik.domain.bo.Produkt;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
 
@@ -49,6 +50,7 @@ public class AddProductToFridgeActivity extends Activity {
 //    TextView name;
     TextView quantity;
     Spinner productSelect;
+    Spinner locationSelect;
     ZamrazalnikDbReaderHelper dbHelper;
 
 
@@ -60,6 +62,16 @@ public class AddProductToFridgeActivity extends Activity {
 
 //        productSelect = (Spinner) findViewById(R.id.spinnerProduct);
         quantity = (TextView) findViewById(R.id.editText2);
+
+
+
+        // Gets all users but replace with whatever list of users you want.
+        List<Miejsce> locations = dbHelper.getAllLocations();
+        //simple_spinner_dropdown_item
+        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
+        locationSelect = (Spinner) findViewById(R.id.spinnerLocation);
+        locationSelect.setAdapter(locationAdapter);
+
 
         // Gets all users but replace with whatever list of users you want.
         List<SpinnerSelectItem> productsList = prepareProductSelectItemList();
@@ -96,8 +108,10 @@ public class AddProductToFridgeActivity extends Activity {
 
     private void saveRecordToDatabaseAndGenerateQrCode() {
         final SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
+        // And to get the actual User object that was selected, you can do this.
+        final Miejsce location = (Miejsce) ( locationSelect ).getSelectedItem();
 
-        if(dbHelper.insertProductToFridge(selectProduct.getId(), Integer.valueOf(quantity.getText().toString()))){
+        if(dbHelper.insertProductToFridge(selectProduct.getId(), location.getId(), Integer.valueOf(quantity.getText().toString()))){
             Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -107,7 +121,7 @@ public class AddProductToFridgeActivity extends Activity {
         final ImageView imgView = (ImageView) findViewById(R.id.imgQrCode);
         QRCodeWriter writer = new QRCodeWriter();
         try {
-            BitMatrix bitMatrix = writer.encode("produkt=" + selectProduct.getId() + ";ilosc=" + quantity.getText().toString() + ";", BarcodeFormat.QR_CODE, 150, 150);
+            BitMatrix bitMatrix = writer.encode("produkt=" + selectProduct.getId() + ";ilosc=" + quantity.getText().toString() + ";miejsce=" + location.getId()+";", BarcodeFormat.QR_CODE, 150, 150);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
             Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);

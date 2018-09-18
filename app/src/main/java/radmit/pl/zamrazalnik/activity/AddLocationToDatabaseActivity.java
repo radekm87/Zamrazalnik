@@ -4,23 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-
-import java.util.List;
-
 import radmit.pl.zamrazalnik.R;
-import radmit.pl.zamrazalnik.domain.bo.Miejsce;
-import radmit.pl.zamrazalnik.domain.bo.Produkt;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
+import radmit.pl.zamrazalnik.domain.bo.Miejsce;
 
-/**
- * Created by rmorawski on 02.09.16.
- */
-public class AddProductToDatabaseActivity extends Activity {
+public class AddLocationToDatabaseActivity extends Activity {
     ZamrazalnikDbReaderHelper dbHelper;
 
 
@@ -35,10 +26,11 @@ public class AddProductToDatabaseActivity extends Activity {
 
         bSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                dbHelper.insertNewProduct(new Produkt(nameProd.getText().toString()));
+                dbHelper.insertNewLocation(new Miejsce(nameProd.getText().toString()));
                 Intent intent = new Intent(getApplicationContext(), DisplayAllProductsActivity.class);
                 startActivity(intent);
             }
         });
     }
 }
+
