@@ -19,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 
 import radmit.pl.zamrazalnik.activity.AddProductToFridgeActivity;
+import radmit.pl.zamrazalnik.activity.DisplayAllLocationsActivity;
 import radmit.pl.zamrazalnik.activity.DisplayAllProductsActivity;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
 
@@ -100,6 +101,10 @@ public class ZamrazalnikActivity extends AppCompatActivity {
             case R.id.item2:
                 Intent intent = new Intent(getApplicationContext(), DisplayAllProductsActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.itemLocation:
+                Intent intent2 = new Intent(getApplicationContext(), DisplayAllLocationsActivity.class);
+                startActivity(intent2);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
