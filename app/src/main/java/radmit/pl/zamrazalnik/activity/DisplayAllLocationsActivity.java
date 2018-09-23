@@ -11,6 +11,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import radmit.pl.zamrazalnik.R;
+import radmit.pl.zamrazalnik.ZamrazalnikActivity;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
 import radmit.pl.zamrazalnik.domain.bo.Miejsce;
 
@@ -34,7 +35,7 @@ public class DisplayAllLocationsActivity  extends Activity {
         ListView obj = (ListView)findViewById(R.id.listViewLocations);
         obj.setAdapter(arrayAdapter);
 
-        Button bAdd = (Button)findViewById(R.id.btnAddNewOnlyLocations);
+        Button bAdd = (Button)findViewById(R.id.btnSaveLocation);
         Button bCancel = (Button)findViewById(R.id.btnCancelLocation);
 
         bAdd.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +47,8 @@ public class DisplayAllLocationsActivity  extends Activity {
 
         bCancel.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(getApplicationContext(), ZamrazalnikActivity.class);
+                startActivity(intent);
             }
         });
     }

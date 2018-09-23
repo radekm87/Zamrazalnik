@@ -154,6 +154,15 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean insertNewLocation (Miejsce location)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Miejsce.COLUMN_MIEJSCE, location.getLocationName());
+        db.insert(Miejsce.TABLE, null, contentValues);
+        return true;
+    }
+
     public boolean takeProductFromFridge(String productId, String quantity, String locationId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ZapasyProdukty zapasLodowka = getRecordZapasyProduktyByProductId(Long.valueOf(productId), Long.valueOf(locationId));

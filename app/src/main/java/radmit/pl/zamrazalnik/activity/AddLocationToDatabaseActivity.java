@@ -18,16 +18,16 @@ public class AddLocationToDatabaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_product);
+        setContentView(R.layout.activity_add_location);
         dbHelper = new ZamrazalnikDbReaderHelper(this);
 
-        final TextView nameProd = (TextView) findViewById(R.id.txtNameProduct);
-        Button bSave = (Button)findViewById(R.id.btnSaveProduct);
+        final TextView nameLoc = (TextView) findViewById(R.id.txtNameLocation);
+        Button bSave = (Button)findViewById(R.id.btnSaveLocation);
 
         bSave.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                dbHelper.insertNewLocation(new Miejsce(nameProd.getText().toString()));
-                Intent intent = new Intent(getApplicationContext(), DisplayAllProductsActivity.class);
+                dbHelper.insertNewLocation(new Miejsce(nameLoc.getText().toString()));
+                Intent intent = new Intent(getApplicationContext(), DisplayAllLocationsActivity.class);
                 startActivity(intent);
             }
         });
