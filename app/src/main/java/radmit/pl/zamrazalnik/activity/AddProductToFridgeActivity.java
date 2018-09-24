@@ -65,12 +65,7 @@ public class AddProductToFridgeActivity extends Activity {
 
 
 
-        // Gets all users but replace with whatever list of users you want.
-        List<Miejsce> locations = dbHelper.getAllLocations();
-        //simple_spinner_dropdown_item
-        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
-        locationSelect = (Spinner) findViewById(R.id.spinnerLocation);
-        locationSelect.setAdapter(locationAdapter);
+
 
 
         // Gets all users but replace with whatever list of users you want.

@@ -11,21 +11,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import radmit.pl.zamrazalnik.activity.AddProductToFridgeActivity;
 import radmit.pl.zamrazalnik.activity.DisplayAllLocationsActivity;
 import radmit.pl.zamrazalnik.activity.DisplayAllProductsActivity;
 import radmit.pl.zamrazalnik.domain.ZamrazalnikDbReaderHelper;
+import radmit.pl.zamrazalnik.domain.bo.Miejsce;
 
 public class ZamrazalnikActivity extends AppCompatActivity {
 
     private ListView obj;
+    Spinner locationSelect;
     ZamrazalnikDbReaderHelper dbHelper;
 
     @Override
@@ -34,6 +38,12 @@ public class ZamrazalnikActivity extends AppCompatActivity {
         setContentView(R.layout.activity_zamrazalnik);
 
         dbHelper = new ZamrazalnikDbReaderHelper(this);
+
+        List<Miejsce> locations = dbHelper.getAllLocations();
+        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
+        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
+        locationSelect.setAdapter(locationAdapter);
+
         ArrayList array_list = dbHelper.getAllProductsWithQuantity();
 
         ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
