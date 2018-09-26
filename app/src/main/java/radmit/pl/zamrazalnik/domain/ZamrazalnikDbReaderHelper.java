@@ -24,13 +24,18 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public ArrayList<String> getAllProductsWithQuantity()
+    public ArrayList<String> getAllProductsWithQuantityFromLocation(String locationId)
     {
         ArrayList<String> array_list = new ArrayList<String>();
 
+        if(locationId == null || locationId.isEmpty()){
+            return array_list;
+        }
+
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + ZapasyProdukty.TABLE + " zl inner join " + Produkt.TABLE + " p on zl.PRODUKT_ID = p.ID", null );
+        Cursor res =  db.rawQuery( "select * from " + ZapasyProdukty.TABLE + " zl inner join " + Produkt.TABLE + " p on zl.PRODUKT_ID = p.ID " +
+                " where zl.MIEJSCE_ID=" + locationId, null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){

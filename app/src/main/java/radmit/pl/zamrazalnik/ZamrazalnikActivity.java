@@ -3,7 +3,6 @@ package radmit.pl.zamrazalnik;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,12 +38,21 @@ public class ZamrazalnikActivity extends AppCompatActivity {
 
         dbHelper = new ZamrazalnikDbReaderHelper(this);
 
-        List<Miejsce> locations = dbHelper.getAllLocations();
-        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
-        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
-        locationSelect.setAdapter(locationAdapter);
+//        List<Miejsce> locations = dbHelper.getAllLocations();
+//        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
+//        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
+//        locationSelect.setAdapter(locationAdapter);
 
-        ArrayList array_list = dbHelper.getAllProductsWithQuantity();
+        List<SpinnerSelectItem> lista = new ArrayList<>();
+        ArrayList<Miejsce> allLocations = dbHelper.getAllLocations();
+        for(Miejsce miejsce : allLocations) {
+            lista.add(new SpinnerSelectItem(miejsce.getId(), miejsce.getLocationName()));
+        }
+        ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, lista);
+        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
+        locationSelect.setAdapter(userAdapter);
+
+        ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(String.valueOf(locationSelect.getSelectedItemId()));
 
         ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
         obj = (ListView)findViewById(R.id.listView);
