@@ -31,6 +31,8 @@ public class ZamrazalnikActivity extends AppCompatActivity {
     Spinner locationSelect;
     ZamrazalnikDbReaderHelper dbHelper;
 
+    ArrayAdapter arrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,23 +40,47 @@ public class ZamrazalnikActivity extends AppCompatActivity {
 
         dbHelper = new ZamrazalnikDbReaderHelper(this);
 
-//        List<Miejsce> locations = dbHelper.getAllLocations();
-//        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
-//        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
-//        locationSelect.setAdapter(locationAdapter);
-
-        List<SpinnerSelectItem> lista = new ArrayList<>();
-        ArrayList<Miejsce> allLocations = dbHelper.getAllLocations();
-        for(Miejsce miejsce : allLocations) {
-            lista.add(new SpinnerSelectItem(miejsce.getId(), miejsce.getLocationName()));
-        }
-        ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, lista);
+        List<Miejsce> locations = dbHelper.getAllLocations();
+        ArrayAdapter locationAdapter = new ArrayAdapter(this, R.layout.spinner, locations);
         locationSelect = (Spinner) findViewById(R.id.spinnerContext);
-        locationSelect.setAdapter(userAdapter);
+        locationSelect.setAdapter(locationAdapter);
+        locationSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Miejsce selectedItem = (Miejsce) parent.getItemAtPosition(position);
+                // Notify the selected item text
+                Toast.makeText
+                        (getApplicationContext(), "Selected : " + selectedItem, Toast.LENGTH_SHORT)
+                        .show();
 
-        ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(String.valueOf(locationSelect.getSelectedItemId()));
+                ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(selectedItem.getId().toString());
+                arrayAdapter=new ArrayAdapter(ZamrazalnikActivity.this,android.R.layout.simple_list_item_1, array_list);
+                obj = (ListView)findViewById(R.id.listView);
+                obj.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
+//                Intent i = new Intent(ZamrazalnikActivity.this, ZamrazalnikActivity.class);
+////                i.putExtra("bEmpID", parent.getItemAtPosition(pos).toString());
+//                startActivity(i);
+            }
 
-        ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+//        List<SpinnerSelectItem> lista = new ArrayList<>();
+//        ArrayList<Miejsce> allLocations = dbHelper.getAllLocations();
+//        for(Miejsce miejsce : allLocations) {
+//            lista.add(new SpinnerSelectItem(miejsce.getId(), miejsce.getLocationName()));
+//        }
+//        ArrayAdapter userAdapter = new ArrayAdapter(this, R.layout.spinner, lista);
+//        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
+//        locationSelect.setAdapter(userAdapter);
+
+        ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(((Miejsce)locationSelect.getSelectedItem()).getId().toString());
+
+        arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
         obj = (ListView)findViewById(R.id.listView);
         obj.setAdapter(arrayAdapter);
         obj.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -80,6 +106,7 @@ public class ZamrazalnikActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 Intent intent = new Intent(getApplicationContext(), AddProductToFridgeActivity.class);
+                intent.putExtra("LOCATION", (Miejsce) locationSelect.getSelectedItem());
                 startActivity(intent);
             }
         });

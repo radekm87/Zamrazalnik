@@ -50,7 +50,7 @@ public class AddProductToFridgeActivity extends Activity {
 //    TextView name;
     TextView quantity;
     Spinner productSelect;
-    Spinner locationSelect;
+    Miejsce locationContext;
     ZamrazalnikDbReaderHelper dbHelper;
 
 
@@ -59,6 +59,11 @@ public class AddProductToFridgeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_put_product_to_fridge);
         dbHelper = new ZamrazalnikDbReaderHelper(this);
+
+
+        locationContext = (Miejsce) getIntent().getSerializableExtra("LOCATION");
+        TextView txtLocation = (TextView)findViewById(R.id.textViewLok);
+        txtLocation.setText(locationContext.getLocationName());
 
 //        productSelect = (Spinner) findViewById(R.id.spinnerProduct);
         quantity = (TextView) findViewById(R.id.editText2);
@@ -104,7 +109,7 @@ public class AddProductToFridgeActivity extends Activity {
     private void saveRecordToDatabaseAndGenerateQrCode() {
         final SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
         // And to get the actual User object that was selected, you can do this.
-        final Miejsce location = (Miejsce) ( locationSelect ).getSelectedItem();
+        final Miejsce location = locationContext;
 
         if(dbHelper.insertProductToFridge(selectProduct.getId(), location.getId(), Integer.valueOf(quantity.getText().toString()))){
             Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();

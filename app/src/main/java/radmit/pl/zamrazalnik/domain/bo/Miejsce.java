@@ -1,6 +1,8 @@
 package radmit.pl.zamrazalnik.domain.bo;
 
-public class Miejsce {
+import java.io.Serializable;
+
+public class Miejsce implements Serializable {
 
     public static final String TABLE = "MIEJSCE";
     public static final String COLUMN_ID = "ID";
