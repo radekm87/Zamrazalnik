@@ -1,13 +1,17 @@
 package radmit.pl.zamrazalnik.activity;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -106,6 +110,27 @@ public class AddProductToFridgeActivity extends Activity {
         return selectItems;
     }
 
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
     private void saveRecordToDatabaseAndGenerateQrCode() {
         final SpinnerSelectItem selectProduct = (SpinnerSelectItem) productSelect.getSelectedItem();
         // And to get the actual User object that was selected, you can do this.
@@ -146,13 +171,14 @@ public class AddProductToFridgeActivity extends Activity {
 //        });
         imgView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                verifyStoragePermissions(AddProductToFridgeActivity.this);
                 Document document = new Document();
 
                 try {
 //                    String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/zamrazalnik";
 
 
+//                    https://developer.android.com/reference/android/content/Context#getExternalFilesDir(java.lang.String)
 
                     File path2 = Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_DOWNLOADS);

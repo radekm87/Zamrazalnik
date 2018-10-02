@@ -58,9 +58,6 @@ public class ZamrazalnikActivity extends AppCompatActivity {
                 obj = (ListView)findViewById(R.id.listView);
                 obj.setAdapter(arrayAdapter);
                 arrayAdapter.notifyDataSetChanged();
-//                Intent i = new Intent(ZamrazalnikActivity.this, ZamrazalnikActivity.class);
-////                i.putExtra("bEmpID", parent.getItemAtPosition(pos).toString());
-//                startActivity(i);
             }
 
             @Override
@@ -78,7 +75,8 @@ public class ZamrazalnikActivity extends AppCompatActivity {
 //        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
 //        locationSelect.setAdapter(userAdapter);
 
-        ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(((Miejsce)locationSelect.getSelectedItem()).getId().toString());
+        Miejsce selectedItem = (Miejsce) locationSelect.getSelectedItem();
+        ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(selectedItem == null ? "-1":selectedItem.getId().toString());
 
         arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
         obj = (ListView)findViewById(R.id.listView);
