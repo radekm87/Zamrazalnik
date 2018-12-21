@@ -1,14 +1,17 @@
 package radmit.pl.zamrazalnik;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -94,6 +97,30 @@ public class ZamrazalnikActivity extends AppCompatActivity {
 //
 //                intent.putExtras(dataBundle);
 //                startActivity(intent);
+            }
+        });
+
+        ((EditText) findViewById(R.id.editTextSearch)).addTextChangedListener(new TextWatcher() {
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence cs, int start, int before, int count) {
+//                ZamrazalnikActivity.this.arrayAdapter.getFilter().filter(cs);
+            }
+
+            // https://stackoverflow.com/questions/12142021/how-can-i-do-something-0-5-second-after-text-changed-in-my-edittext
+            @Override
+            public void afterTextChanged(Editable s) {
+                ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(s..toString());
+                arrayAdapter=new ArrayAdapter(ZamrazalnikActivity.this,android.R.layout.simple_list_item_1, array_list);
+                obj = (ListView)findViewById(R.id.listView);
+                obj.setAdapter(arrayAdapter);
+                arrayAdapter.notifyDataSetChanged();
             }
         });
 

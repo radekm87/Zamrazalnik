@@ -10,5 +10,8 @@
     <item android:id="@+id/itemLocation"
         android:title="Lista miejsc" >
     </item>
+    <item android:id="@+id/itemSearch"
+        android:title="Szukaj" >
+    </item>
 
 </menu>

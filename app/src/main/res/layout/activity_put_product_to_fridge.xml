@@ -40,6 +40,20 @@
         android:id="@+id/editText2"
         android:text="1" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Opis"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editTextOpis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text|textPersonName" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,12 +67,12 @@
         android:id="@+id/buttonReturn" />
 
     <ImageView
+        android:id="@+id/imgQrCode"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:id="@+id/imgQrCode"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.56"
-        android:longClickable="false"
-        android:background="#77b643" />
+        android:background="#77b643"
+        android:longClickable="false" />
 
 </LinearLayout>

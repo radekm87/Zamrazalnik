@@ -2,7 +2,6 @@ package radmit.pl.zamrazalnik.activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,7 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -53,6 +52,7 @@ public class AddProductToFridgeActivity extends Activity {
 
 //    TextView name;
     TextView quantity;
+    TextView desription;
     Spinner productSelect;
     Miejsce locationContext;
     ZamrazalnikDbReaderHelper dbHelper;
@@ -71,6 +71,7 @@ public class AddProductToFridgeActivity extends Activity {
 
 //        productSelect = (Spinner) findViewById(R.id.spinnerProduct);
         quantity = (TextView) findViewById(R.id.editText2);
+        desription = (TextView) findViewById(R.id.editTextOpis);
 
 
 
@@ -136,7 +137,7 @@ public class AddProductToFridgeActivity extends Activity {
         // And to get the actual User object that was selected, you can do this.
         final Miejsce location = locationContext;
 
-        if(dbHelper.insertProductToFridge(selectProduct.getId(), location.getId(), Integer.valueOf(quantity.getText().toString()))){
+        if(dbHelper.insertProductToFridge(selectProduct.getId(), location.getId(), Integer.valueOf(quantity.getText().toString()), desription.getText().toString())){
             Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
         }
         else{
@@ -195,7 +196,9 @@ public class AddProductToFridgeActivity extends Activity {
 
 //                    File file = new File(dir, "sample.pdf");
                     File file = new File(path2, "sample.pdf");
-//                    file.createNewFile();
+                    if(!file.exists()) {
+                        file.createNewFile();
+                    }
 
                     PdfWriter.getInstance(document, new FileOutputStream(file));
 
@@ -212,25 +215,9 @@ public class AddProductToFridgeActivity extends Activity {
                     Paragraph p = new Paragraph(selectProduct.getValue());
                     document.add(p);
 
-                    BackgroundMail.newBuilder(getApplicationContext())
-                            .withUsername("magdalena.chmurzynska@gmail.com")
-                            .withPassword("Onomato peja")
-                            .withMailto("radekm87@gmail.com")
-                            .withSubject("Test subject")
-                            .withBody("this is the body")
-                            .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(getApplicationContext(), "OK SEND MAIL: ", Toast.LENGTH_SHORT).show();
-                                }
-                            })
-                            .withOnFailCallback(new BackgroundMail.OnFailCallback() {
-                                @Override
-                                public void onFail() {
-                                    Toast.makeText(getApplicationContext(), "FAILED SEND MAIL: ", Toast.LENGTH_SHORT).show();
-                                }
-                            }).withAttachments(file.getAbsolutePath())
-                            .send();
+                    sendMailWithQrCode(file);
+
+
 //                    Intent intent = new Intent(Intent.ACTION_SEND ,Uri.parse("mailto:")); // it's not ACTION_SEND
 //                    intent.setType("text/plain");
 //                    intent.putExtra(Intent.EXTRA_SUBJECT, "Card Set ");
@@ -260,6 +247,32 @@ public class AddProductToFridgeActivity extends Activity {
         });
 
 
+    }
+
+    private void sendMailWithQrCode(File file) {
+        try {
+            BackgroundMail.newBuilder(getApplicationContext())
+                    .withUsername("magdalena.chmurzynska@gmail.com")
+                    .withPassword("Onomato peja")
+                    .withMailto("radekm87@gmail.com")
+                    .withSubject("Test subject")
+                    .withBody("this is the body")
+                    .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getApplicationContext(), "OK SEND MAIL: ", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                        @Override
+                        public void onFail() {
+                            Toast.makeText(getApplicationContext(), "FAILED SEND MAIL: ", Toast.LENGTH_SHORT).show();
+                        }
+                    }).withAttachments(file.getAbsolutePath())
+                    .send();
+        } catch(Exception e) {
+            Toast.makeText(getApplicationContext(), "ERROR THROW SEND MAIL: ", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

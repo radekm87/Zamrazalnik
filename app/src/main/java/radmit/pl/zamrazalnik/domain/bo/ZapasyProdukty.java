@@ -12,6 +12,7 @@ public class ZapasyProdukty {
     public static final String COLUMN_PRODUCT_ID = "PRODUKT_ID";
     public static final String COLUMN_LOCATION_ID = "MIEJSCE_ID";
     public static final String COLUMN_QUANTITY = "ILOSC";
+    public static final String COLUMN_DESCRIPTION = "OPIS";
 
     private static final String TEXT_TYPE = " TEXT";
     private static final String INTEGER_TYPE = " INTEGER";
@@ -21,7 +22,8 @@ public class ZapasyProdukty {
                     COLUMN_ID + " INTEGER PRIMARY KEY," +
                     COLUMN_PRODUCT_ID + INTEGER_TYPE + COMMA_SEP +
                     COLUMN_LOCATION_ID + INTEGER_TYPE + COMMA_SEP +
-                    COLUMN_QUANTITY + INTEGER_TYPE + " )";
+                    COLUMN_QUANTITY + INTEGER_TYPE + COMMA_SEP +
+                    COLUMN_DESCRIPTION + TEXT_TYPE + " )";
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TABLE;
 

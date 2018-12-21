@@ -17,7 +17,7 @@ import radmit.pl.zamrazalnik.domain.bo.ZapasyProdukty;
  */
 public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "Zamrazalnik.db";
 
     public ZamrazalnikDbReaderHelper(Context context) {
@@ -128,7 +128,7 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         }
     }
 
-    public boolean insertProductToFridge(Long productId, Long locationId, Integer quantity)
+    public boolean insertProductToFridge(Long productId, Long locationId, Integer quantity, String description)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ZapasyProdukty zapasLodowka = getRecordZapasyProduktyByProductId(productId, locationId);
@@ -139,6 +139,7 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
             contentValues.put(ZapasyProdukty.COLUMN_PRODUCT_ID, productId);
             contentValues.put(ZapasyProdukty.COLUMN_LOCATION_ID, locationId);
             contentValues.put(ZapasyProdukty.COLUMN_QUANTITY, quantity);
+            contentValues.put(ZapasyProdukty.COLUMN_DESCRIPTION, description);
             db.insert(ZapasyProdukty.TABLE, null, contentValues);
         } else {
             // modify
