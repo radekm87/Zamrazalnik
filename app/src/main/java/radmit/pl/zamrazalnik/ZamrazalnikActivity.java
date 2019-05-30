@@ -1,7 +1,6 @@
 package radmit.pl.zamrazalnik;
 
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +21,7 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
 import radmit.pl.zamrazalnik.activity.AddProductToFridgeActivity;
 import radmit.pl.zamrazalnik.activity.DisplayAllLocationsActivity;
 import radmit.pl.zamrazalnik.activity.DisplayAllProductsActivity;
@@ -78,7 +78,7 @@ public class ZamrazalnikActivity extends AppCompatActivity {
 //        locationSelect = (Spinner) findViewById(R.id.spinnerContext);
 //        locationSelect.setAdapter(userAdapter);
 
-        Miejsce selectedItem = (Miejsce) locationSelect.getSelectedItem();
+        final Miejsce selectedItem = (Miejsce) locationSelect.getSelectedItem();
         ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(selectedItem == null ? "-1":selectedItem.getId().toString());
 
         arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
@@ -116,7 +116,7 @@ public class ZamrazalnikActivity extends AppCompatActivity {
             // https://stackoverflow.com/questions/12142021/how-can-i-do-something-0-5-second-after-text-changed-in-my-edittext
             @Override
             public void afterTextChanged(Editable s) {
-                ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(s..toString());
+                ArrayList array_list = dbHelper.getAllProductsWithQuantityFromLocation(selectedItem == null ? "-1":selectedItem.getId().toString(), s.toString());
                 arrayAdapter=new ArrayAdapter(ZamrazalnikActivity.this,android.R.layout.simple_list_item_1, array_list);
                 obj = (ListView)findViewById(R.id.listView);
                 obj.setAdapter(arrayAdapter);

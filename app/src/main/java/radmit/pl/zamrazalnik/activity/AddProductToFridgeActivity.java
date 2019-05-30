@@ -115,7 +115,10 @@ public class AddProductToFridgeActivity extends Activity {
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE
     };
 
     public static void verifyStoragePermissions(Activity activity) {
@@ -213,6 +216,7 @@ public class AddProductToFridgeActivity extends Activity {
                     document.add(image);
 
                     Paragraph p = new Paragraph(selectProduct.getValue());
+                    p.getFont().setSize(24);
                     document.add(p);
 
                     sendMailWithQrCode(file);
@@ -254,6 +258,8 @@ public class AddProductToFridgeActivity extends Activity {
             BackgroundMail.newBuilder(getApplicationContext())
                     .withUsername("magdalena.chmurzynska@gmail.com")
                     .withPassword("Onomato peja")
+//                    .withUsername("radoslaw.morawski1@gmail.com")
+//                    .withPassword("morawski87")
                     .withMailto("radekm87@gmail.com")
                     .withSubject("Test subject")
                     .withBody("this is the body")

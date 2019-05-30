@@ -24,7 +24,7 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public ArrayList<String> getAllProductsWithQuantityFromLocation(String locationId)
+    public ArrayList<String> getAllProductsWithQuantityFromLocation(String locationId, String searchItem)
     {
         ArrayList<String> array_list = new ArrayList<String>();
 
@@ -35,19 +35,25 @@ public class ZamrazalnikDbReaderHelper  extends SQLiteOpenHelper {
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + ZapasyProdukty.TABLE + " zl inner join " + Produkt.TABLE + " p on zl.PRODUKT_ID = p.ID " +
-                " where zl.MIEJSCE_ID=" + locationId, null );
+                " where zl.MIEJSCE_ID=" + locationId +
+                " and p.NAZWA_PRODUKT LIKE('%" + searchItem + "%')", null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
             array_list.add(
                     res.getString(res.getColumnIndex(Produkt.COLUMN_PRODUCT))
-                    + " ( "
-                    + res.getInt(res.getColumnIndex(ZapasyProdukty.COLUMN_QUANTITY))
-                    + " )"
+                            + " ( "
+                            + res.getInt(res.getColumnIndex(ZapasyProdukty.COLUMN_QUANTITY))
+                            + " )"
             );
             res.moveToNext();
         }
         return array_list;
+    }
+
+    public ArrayList<String> getAllProductsWithQuantityFromLocation(String locationId)
+    {
+       return getAllProductsWithQuantityFromLocation(locationId, "");
     }
 
 //    public ArrayList<String> getAllProductsListString()
