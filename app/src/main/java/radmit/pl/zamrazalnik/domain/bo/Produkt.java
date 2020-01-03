@@ -1,7 +1,5 @@
 package radmit.pl.zamrazalnik.domain.bo;
 
-import android.provider.BaseColumns;
-
 /**
  * Created by rmorawski on 02.09.16.
  */
@@ -23,23 +21,28 @@ public class Produkt {
             "DROP TABLE IF EXISTS " + TABLE;
 
     private Long id;
-    private String productName;
+    private String name;
+    private String description;
 
-    public Produkt(String productName) {
-        this.productName = productName;
+    public Produkt(String productName, String productDesc) {
+        this.name = productName;
+        this.description = productDesc;
     }
 
     public Produkt(Long id, String productName) {
         this.id = id;
-        this.productName = productName;
+        this.name = productName;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
+    public String getDescription() {
+        return description;
+    }
 }

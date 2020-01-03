@@ -15,10 +15,10 @@
         android:id="@+id/btnAddNewOnlyProduct" />
 
     <Button
+        android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Powrót"
-        android:id="@+id/btnCancel"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:text="Powrót" />
 
 </LinearLayout>

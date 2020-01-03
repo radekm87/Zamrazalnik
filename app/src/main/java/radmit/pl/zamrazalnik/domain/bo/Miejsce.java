@@ -21,9 +21,11 @@ public class Miejsce implements Serializable {
 
     private Long id;
     private String locationName;
+    private LocationEnum typeOfLocation;
 
-    public Miejsce(String locationName) {
+    public Miejsce(String locationName, LocationEnum typeOfLocation) {
         this.locationName = locationName;
+        this.typeOfLocation = typeOfLocation;
     }
 
     public Miejsce(Long id, String locationName) {
@@ -39,6 +41,9 @@ public class Miejsce implements Serializable {
         return locationName;
     }
 
+    public LocationEnum getLevelEnumLocation() {
+        return typeOfLocation;
+    }
 
     @Override
     public String toString() {

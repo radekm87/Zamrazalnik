@@ -104,7 +104,7 @@ public class AddProductToFridgeActivity extends Activity {
         ArrayList<Produkt> allProducts = dbHelper.getAllProducts();
         ArrayList<SpinnerSelectItem> selectItems = new ArrayList<>();
         for (Produkt prod : allProducts) {
-            SpinnerSelectItem si = new SpinnerSelectItem(prod.getId(),prod.getProductName());
+            SpinnerSelectItem si = new SpinnerSelectItem(prod.getId(),prod.getName());
             selectItems.add(si);
         }
 
